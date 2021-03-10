@@ -1,8 +1,8 @@
 ---
 title: "TBD"
 subtitle: "TBD"
-author: "TBD"
-thanks: "Code and data are available at: LINK."
+author: "Bongju Yoo and Najma Osman"
+thanks: "Code and data are available at: https://github.com/bonjwow/lost-wallet"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 output:
@@ -15,70 +15,107 @@ bibliography: references.bib
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-library(palmerpenguins)
+library(ggplot2)
+
+library(ggthemes)
+library(kableExtra)
+library(janitor)
+library(dplyr)
 ```
 
 # Introduction
 
 
 
-
 # Data
 
-Our data is of penguins (Figure \@ref(fig:bills)).
+```{r, echo = FALSE, message = FALSE}
+### Import the cleaned data
+dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
 
-```{r bills, fig.cap="Bills of penguins", echo = FALSE}
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+### All wallets with no money
+dfNoMoney <- 
+  dfCleanBehav %>%
+  filter(cond == 0) %>%
+  group_by(country_2) %>%
+  tally()
+
+### All wallets with money
+dfMoney <- 
+  dfCleanBehav %>%
+  filter(cond == 1) %>%
+  group_by(country_2) %>%
+  tally()
+
+### Returned wallets with no money
+dfReturnedNoMoney <-
+  dfCleanBehav %>%
+  filter(cond == 0 & response == 100) %>%
+  group_by(country_2) %>%
+  tally()
+
+### Returned wallets with money
+dfReturnedMoney <-
+  dfCleanBehav %>%
+  filter(cond == 1 & response == 100) %>%
+  group_by(country_2) %>%
+  tally()
+
+### Merge all wallets and returned wallets with no money
+dfMergedNoMoney <-
+  merge(x = dfNoMoney, y = dfReturnedNoMoney, by = "country_2", all.x = TRUE) %>%
+  mutate(rate = round(n.y / n.x * 100, 2)) %>%
+  rename(country = "country_2") %>%
+  rename(total = "n.x") %>%
+  rename(returned = "n.y")
+
+### Merge all wallets and returned wallets with money
+dfMergedMoney <-
+  merge(x = dfMoney, y = dfReturnedMoney, by = "country_2", all.x = TRUE) %>%
+  mutate(rate = round(n.y / n.x * 100, 2)) %>%
+  rename(country = "country_2") %>%
+  rename(total = "n.x") %>%
+  rename(returned = "n.y")
+  
 ```
 
-Talk more about it.
 
-Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can change the height and width so they don't take the whole page?)
+```{r, echo = FALSE, message = FALSE}
 
-```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
+### Dumbbell Plot
 
-# This needs to be about the random data tha tI sasmpled?
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
+dfSample <- data.frame(country = c("A", "B", "c", "D", "E"), 
+                       noMoney = c(20, 40, 10, 30, 50), 
+                       money = c(70, 50, 30, 60, 80))
+
+ggplot(dfSample, aes(y = country, x = noMoney, xend = money)) +
+  geom_dumbbell(size = 3, 
+                color = "#e3e2e1",
+                colour_x = "#FFA500", 
+                colour_xend = "#FF0000",
+                dot_guide=TRUE, dot_guide_size=0.25) +
+  labs(x=NULL, y=NULL, title="ggplot2 geom_dumbbell with dot guide") +
   theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+  theme(panel.grid.major.x=element_line(size=0.02))
+
 ```
 
-Talk way more about it. 
+
+
+## Description of Study
+
+## Methodology and Data Collection
 
 
 
 # Model
-
-\begin{equation}
-Pr(\theta | y) = \frac{Pr(y | \theta) Pr(\theta)}{Pr(y)}  (\#eq:bayes)
-\end{equation}
-
-Equation \@ref(eq:bayes) seems useful, eh?
-
-Here's a dumb example of how to use some references: In paper we run our analysis in `R` [@citeR]. We also use the `tidyverse` which was written by @thereferencecanbewhatever If we were interested in baseball data then @citeLahman could be useful. 
 
 
 # Results
 
 # Discussion
 
-## First discussion point
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
+## Overview of Findings
 
 ## Weaknesses and next steps
 

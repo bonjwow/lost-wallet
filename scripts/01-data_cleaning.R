@@ -19,10 +19,14 @@ dfBehav <-
   select('id',
          'country',
          'country_2',
+         'cond',
          'response') %>%
   ### Remove empty rows
   mutate_all(~ifelse(. %in% c("N/A", "null", ""), NA, .)) %>%
-  na.omit()
+  na.omit() %>%
+
+  ### Keep only 'money' and 'no-money' conditions
+  filter(cond == 0 |cond == 1)
 
 ### Save data 
 write_csv(dfBehav, "inputs/data/clean_behavioral-data.csv")
