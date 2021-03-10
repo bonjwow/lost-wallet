@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(ggplot2)
-
+library(ggalt)
 library(ggthemes)
 library(kableExtra)
 library(janitor)
@@ -64,7 +64,7 @@ dfReturnedMoney <-
 ### Merge all wallets and returned wallets with no money
 dfMergedNoMoney <-
   merge(x = dfNoMoney, y = dfReturnedNoMoney, by = "country_2", all.x = TRUE) %>%
-  mutate(rate = round(n.y / n.x * 100, 2)) %>%
+  mutate(rating = round(n.y / n.x * 100, 2)) %>%
   rename(country = "country_2") %>%
   rename(total = "n.x") %>%
   rename(returned = "n.y")
@@ -72,7 +72,7 @@ dfMergedNoMoney <-
 ### Merge all wallets and returned wallets with money
 dfMergedMoney <-
   merge(x = dfMoney, y = dfReturnedMoney, by = "country_2", all.x = TRUE) %>%
-  mutate(rate = round(n.y / n.x * 100, 2)) %>%
+  mutate(rating = round(n.y / n.x * 100, 2)) %>%
   rename(country = "country_2") %>%
   rename(total = "n.x") %>%
   rename(returned = "n.y")
@@ -83,20 +83,28 @@ dfMergedMoney <-
 ```{r, echo = FALSE, message = FALSE}
 
 ### Dumbbell Plot
+dfRatings <- 
+  data.frame(country = dfMergedNoMoney$country,
+             noMoney = dfMergedNoMoney$rating,
+             money = dfMergedMoney$rating) %>%
+  arrange(desc(noMoney))
 
-dfSample <- data.frame(country = c("A", "B", "c", "D", "E"), 
-                       noMoney = c(20, 40, 10, 30, 50), 
-                       money = c(70, 50, 30, 60, 80))
+### Reorder factor levels
+dfRatings$country <- reorder(dfRatings$country, dfRatings$noMoney)
 
-ggplot(dfSample, aes(y = country, x = noMoney, xend = money)) +
-  geom_dumbbell(size = 3, 
+ggplot(dfRatings, aes(y = country, x = noMoney, xend = money)) +
+  geom_dumbbell(size = 2, 
                 color = "#e3e2e1",
                 colour_x = "#FFA500", 
                 colour_xend = "#FF0000",
-                dot_guide=TRUE, dot_guide_size=0.25) +
-  labs(x=NULL, y=NULL, title="ggplot2 geom_dumbbell with dot guide") +
+                dot_guide = TRUE, 
+                dot_guide_size = 0.05,
+                show.legend = TRUE) +
+                # TODO: Fix legend 
+  labs(x = NULL, y = NULL, title = "Share of wallets reported by country") +
   theme_minimal() +
-  theme(panel.grid.major.x=element_line(size=0.02))
+  scale_color_manual(name = "", values = c("red", "blue") ) +
+  theme(panel.grid.major.x = element_line(size = 0.02))
 
 ```
 
