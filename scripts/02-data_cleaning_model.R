@@ -26,6 +26,7 @@ dfBehavModel <-
          'age',
          'above40',
          'male',
+         'coworkers',
          'computer',
          'other_bystanders') %>%
   ### Remove empty rows
