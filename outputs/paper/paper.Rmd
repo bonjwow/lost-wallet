@@ -130,12 +130,12 @@ ggplot(dfRatings, aes(y = country, x = noMoney, xend = money)) +
 s8_money <-
   dfBehavModel %>%
   filter(cond == 1 | cond == 2 | cond == 3)
-ols_regress(response ~ cond + male + age + computer + coworkers + other_bystanders, data = s8_money)
+ols_regress(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_money)
 
 s8_no_money <-
   dfBehavModel %>%
   filter(cond == 0)
-ols_regress(response ~ cond + male + age + computer + coworkers + other_bystanders, data = s8_no_money)
+ols_regress(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_no_money)
 
 
 # need to control for treatment + institution + city 
