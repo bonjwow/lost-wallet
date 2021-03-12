@@ -21,6 +21,11 @@ library(ggthemes)
 library(kableExtra)
 library(janitor)
 library(dplyr)
+library(olsrr)
+
+### Import the cleaned data
+dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
+dfBehavModel <- readr::read_csv("../../inputs/data/clean_behavioral-data_model.csv")
 ```
 
 # Introduction
@@ -30,9 +35,6 @@ library(dplyr)
 # Data
 
 ```{r, echo = FALSE, message = FALSE}
-### Import the cleaned data
-dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
-
 ### All wallets with no money
 dfNoMoney <- 
   dfCleanBehav %>%
@@ -118,8 +120,35 @@ ggplot(dfRatings, aes(y = country, x = noMoney, xend = money)) +
 
 # Model
 
+```{r S8, echo = FALSE, message = FALSE}
+
+### OLS formula : y = mx + c, where 
+### y = response (dependent variable) - so report/no report,
+### m = slope
+### x = independent variable, predictor - condition (no money, money, big money)
+### c = the intercept
+s8_money <-
+  dfBehavModel %>%
+  filter(cond == 1 | cond == 2 | cond == 3)
+ols_regress(response ~ cond + male + age + computer + coworkers + other_bystanders, data = s8_money)
+
+s8_no_money <-
+  dfBehavModel %>%
+  filter(cond == 0)
+ols_regress(response ~ cond + male + age + computer + coworkers + other_bystanders, data = s8_no_money)
+
+
+# need to control for treatment + institution + city 
+```
+
+```{r S9, echo = FALSE, message = FALSE}
+
+```
+
 
 # Results
+
+
 
 # Discussion
 
