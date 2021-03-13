@@ -21,12 +21,22 @@ library(ggthemes)
 library(kableExtra)
 library(janitor)
 library(dplyr)
+# install.packages("olsrr")
 library(olsrr)
 
 ### Import the cleaned data
 dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
 dfBehavModel <- readr::read_csv("../../inputs/data/clean_behavioral-data_model.csv")
 ```
+
+```{r, echo = FALSE, message = FALSE}
+#### Define color HEX Code ####
+colorRed <- "#E43B2D"
+colorOrange <- "#F27E33"
+colorBrown <- "#A65629"
+colorGray <- "#E3E2E1"
+```
+
 
 # Introduction
 
@@ -96,17 +106,79 @@ dfRatings$country <- reorder(dfRatings$country, dfRatings$noMoney)
 
 ggplot(dfRatings, aes(y = country, x = noMoney, xend = money)) +
   geom_dumbbell(size = 2, 
-                color = "#e3e2e1",
-                colour_x = "#FFA500", 
-                colour_xend = "#FF0000",
+                color = colorGray,
+                colour_x = colorOrange, 
+                colour_xend = colorRed,
                 dot_guide = TRUE, 
                 dot_guide_size = 0.05,
                 show.legend = TRUE) +
                 # TODO: Fix legend 
   labs(x = NULL, y = NULL, title = "Share of wallets reported by country") +
   theme_minimal() +
-  scale_color_manual(name = "", values = c("red", "blue") ) +
+  scale_color_manual(name = "", values = c("red", "blue")) +
   theme(panel.grid.major.x = element_line(size = 0.02))
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+#### Line chart: Reporting rates as a function of monetary stakes ####
+
+### Report rate: Poland, UK, and USA
+dfRateNoMoney <-
+  dfMergedNoMoney %>%
+  filter(country == "Poland" | country == "UK" | country == "USA")
+
+dfRateMoney <-
+  dfMergedMoney %>%
+  filter(country == "Poland" | country == "UK" | country == "USA")
+  
+### All wallets with big money
+dfBigMoney <- 
+  dfCleanBehav %>%
+  filter(cond == 2) %>%
+  group_by(country_2) %>%
+  tally()
+
+### Returned wallets with big money
+dfReturnedBigMoney <-
+  dfCleanBehav %>%
+  filter(cond == 2 & response == 100) %>%
+  group_by(country_2) %>%
+  tally()
+
+### Merge all wallets and returned wallets with money
+dfMergedBigMoney <-
+  merge(x = dfBigMoney, y = dfReturnedBigMoney, by = "country_2", all.x = TRUE) %>%
+  mutate(rating = round(n.y / n.x * 100, 2)) %>%
+  rename(country = "country_2") %>%
+  rename(total = "n.x") %>%
+  rename(returned = "n.y")
+
+### Bind all conditions
+dfRateNoMoney["condition"] <- "NoMoney"
+dfRateMoney["condition"] <- "Money"
+dfMergedBigMoney["condition"] <- "BigMoney"
+dfRate3Cond <- rbind(dfRateNoMoney, dfRateMoney, dfMergedBigMoney)
+
+### Sort by condition
+dfRate3Cond$condition <- factor(dfRate3Cond$condition, 
+                                levels = c("NoMoney", "Money", "BigMoney"))
+
+### Display data in a line graph
+ggplot(data = dfRate3Cond,
+       aes(x = condition,
+           y = rating,
+           group = country,
+           color = country)) +
+    geom_line(size = 1) +
+    scale_color_manual(values = c(colorBrown, colorRed, colorOrange)) +
+    geom_point(size = 3) +
+    theme_bw() +
+    theme(axis.line = element_line(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          panel.background = element_blank()) 
 
 ```
 
