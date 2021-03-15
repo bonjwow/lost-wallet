@@ -21,8 +21,9 @@ library(ggthemes)
 library(kableExtra)
 library(janitor)
 library(dplyr)
-# install.packages("olsrr")
+
 library(olsrr)
+library(plm)
 
 ### Import the cleaned data
 dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
@@ -202,21 +203,39 @@ ggplot(data = dfRate3Cond,
 ### m = slope
 ### x = independent variable, predictor - condition (no money, money, big money)
 ### c = the intercept
-s8_money <-
-  dfBehavModel %>%
-  filter(cond == 1 | cond == 2 | cond == 3)
-ols_regress(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_money)
 
-s8_no_money <-
-  dfBehavModel %>%
-  filter(cond == 0)
-ols_regress(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_no_money)
+# conditions
+# 0 - no money, 1 - money, 2 - big money, 3 - money no key.
 
+# controls:
+  # fixed effects for institution and city
+  # treatment condition
+# binary controls:
+  # male, above 40, coworkers, computer, bystanders
 
-# need to control for treatment + institution + city 
+s8 <- dfBehavModel %>%
+  filter(cond == 0 | cond == 1)
+
+### money vs no money
+
+# proportional test
+
+# regression (for whatever reason, can't do fixed effects for city + institution using plm without issues)
+
+s8_main_result <- lm(response ~ cond, data = s8)
+summary(s8_main_result)
+  
+# regression by country
+
+s8_by_country <- lm(response ~ cond + male + above40 + coworkers + computer + other_bystanders, data = s8)
+summary(s8_by_country)
+
+# final table (S8)
+
 ```
 
 ```{r S9, echo = FALSE, message = FALSE}
+
 
 ```
 
