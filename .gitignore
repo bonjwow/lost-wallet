@@ -39,3 +39,8 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+*.tex
+outputs/paper/paper.log
+outputs/paper/paper_files/figure-latex/unnamed-chunk-3-1.pdf
+outputs/paper/paper_files/figure-latex/unnamed-chunk-4-1.pdf
+outputs/paper/paper.out

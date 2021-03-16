@@ -31,8 +31,6 @@ dfBehavModel <-
   ### Remove empty rows
   mutate_all(~ifelse(. %in% c("N/A", "null", ""), NA, .)) %>%
   na.omit()
-  ### change response to 0/1 rather than 0/100
-  dfBehavModel$response[dfBehavModel$response == 100] <- 1
 
 ### Save data 
 write_csv(dfBehavModel, "inputs/data/clean_behavioral-data_model.csv")
