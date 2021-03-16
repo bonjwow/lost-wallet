@@ -7,6 +7,8 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 output:
   bookdown::pdf_document2:
+header-includes:
+   - \usepackage{dcolumn} 
 toc: FALSE
 bibliography: references.bib
 ---
@@ -21,9 +23,7 @@ library(ggthemes)
 library(kableExtra)
 library(janitor)
 library(dplyr)
-
-library(olsrr)
-library(plm)
+library(stargazer)
 
 ### Import the cleaned data
 dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
@@ -196,15 +196,11 @@ ggplot(data = dfRate3Cond,
 
 # Model
 
-```{r S8, echo = FALSE, message = FALSE}
 
-### OLS formula : y = mx + c, where 
-### y = response (dependent variable) - so report/no report,
-### m = slope
-### x = independent variable, predictor - condition (no money, money, big money)
-### c = the intercept
+# Results
 
-# conditions
+```{r S8, echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
+### conditions
 # 0 - no money, 1 - money, 2 - big money, 3 - money no key.
 
 # controls:
@@ -213,36 +209,69 @@ ggplot(data = dfRate3Cond,
 # binary controls:
   # male, above 40, coworkers, computer, bystanders
 
-s8 <- dfBehavModel %>%
-  filter(cond == 0 | cond == 1)
+# code dummy variables
+s8_model <- dfBehavModel
+s8_model$cond <- ifelse(s8_model$cond < 1, 0, 1)
 
-### money vs no money
-
-# proportional test
-
-# regression (for whatever reason, can't do fixed effects for city + institution using plm without issues)
-
-s8_main_result <- lm(response ~ cond, data = s8)
-summary(s8_main_result)
-  
-# regression by country
-
-s8_by_country <- lm(response ~ cond + male + above40 + coworkers + computer + other_bystanders, data = s8)
-summary(s8_by_country)
+# regression models
+s8_main_result <- lm(response ~ cond, data = s8_model)
+s8_money_result <- lm(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_model)
 
 # final table (S8)
+stargazer(s8_main_result, s8_money_result, 
+          title = "Reporting rates in the Money and No Money Condition", 
+          align = TRUE, 
+          type = 'latex', 
+          dep.var.labels = "Response", 
+          covariate.labels = c("Money", "Male", "Above 40", "Computer", "Coworkers", "Other Bystanders", "Constant"),
+          column.labels = c("No Money", "Money"))
 
 ```
 
-```{r S9, echo = FALSE, message = FALSE}
+```{r S9, echo = FALSE, warning = FALSE, message = FALSE}
+### conditions
+# 0 - no money, 1 - money, 2 - big money, 3 - money no key.
 
+# controls:
+  # fixed effects for institution and city
+  # treatment condition
+# binary controls:
+  # situation
+  # recipient
+  # other treatments
 
+### conditions (money vs big money) - next step is creating dummy variables for big money + money to finalize the table
+
+# UK, Poland, and US
+s9_main <- dfBehavModel %>%
+  filter(country == 39 | country == 27 | country == 40)
+s9_main_result <- lm(response ~ cond, data = s9_main)
+
+# UK
+s9_uk <- s9_main %>%
+  filter(country == 39)
+s9_uk_result <- lm(response ~ cond, data = s9_uk)
+
+# Poland
+s9_poland <- s9_main %>%
+  filter(country == 27)
+  
+s9_poland_result <- lm(response ~ cond, data = s9_poland)
+
+# USA
+s9_usa <- s9_main %>%
+  filter(country == 40)
+s9_usa_result <- lm(response ~ cond, data = s9_usa)
+
+# final table
+stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result, 
+          title = "Reporting rates in NoMoney, Money, and Big Money condition", 
+          align = TRUE, 
+          type = 'latex', 
+          dep.var.labels = "Response", 
+          covariate.labels = c("Money", "Constant"),
+          column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
-
-
-# Results
-
-
 
 # Discussion
 
