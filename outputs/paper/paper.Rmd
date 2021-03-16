@@ -273,6 +273,53 @@ stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result,
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
 
+```{r S10, echo = FALSE, warning = FALSE, message = FALSE}
+### conditions
+# 0 - no money, 1 - money, 2 - big money, 3 - money no key.
+
+# controls:
+  # fixed effects for institution and city
+  # treatment condition
+# binary controls:
+  # situation
+  # recipient
+  # other treatments
+
+### conditions (money vs big money) - next step is creating dummy variables for big money + money to finalize the table
+
+# UK, Poland, and US
+s10_main <- dfBehavModel %>%
+  filter(country == 39 | country == 27 | country == 40)
+s10_main$cond <- ifelse(s10_main$cond == 3, 1, 0)
+
+
+s10_main_result <- lm(response ~ cond, data = s9_main)
+
+# UK
+s10_uk <- s9_main %>%
+  filter(country == 39)
+s10_uk_result <- lm(response ~ cond, data = s10_uk)
+
+# Poland
+s10_poland <- s10_main %>%
+  filter(country == 27)
+  
+s10_poland_result <- lm(response ~ cond, data = s10_poland)
+
+# USA
+s10_usa <- s10_main %>%
+  filter(country == 40)
+s10_usa_result <- lm(response ~ cond, data = s10_usa)
+
+# final table
+stargazer(s10_main_result, s10_uk_result, s10_poland_result, s10_usa_result, 
+          title = "Reporting rates in Money-No Key condition", 
+          align = TRUE, 
+          type = 'latex', 
+          dep.var.labels = "Response", 
+          covariate.labels = c("Money-NoKey", "Constant"),
+          column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
+```
 # Discussion
 
 ## Overview of Findings
