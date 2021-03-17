@@ -221,7 +221,7 @@ s8_money_result <- lm(response ~ cond + male + above40 + computer + coworkers + 
 stargazer(s8_main_result, s8_money_result, 
           title = "Reporting rates in the Money and No Money Condition", 
           align = TRUE, 
-          type = 'latex', 
+          type = 'text', 
           dep.var.labels = "Response", 
           covariate.labels = c("Money", "Male", "Above 40", "Computer", "Coworkers", "Other Bystanders", "Constant"),
           column.labels = c("No Money", "Money"))
@@ -244,32 +244,35 @@ stargazer(s8_main_result, s8_money_result,
 
 # UK, Poland, and US
 s9_main <- dfBehavModel %>%
-  filter(country == 39 | country == 27 | country == 40)
-s9_main_result <- lm(response ~ cond, data = s9_main)
+  filter(country == 39 | country == 27 | country == 40) %>%
+  mutate(money = if_else(cond == 1, 1, 0)) %>%
+  mutate(big_money = if_else(cond == 2, 1, 0))
+
+s9_main_result <- lm(response ~ money + big_money, data = s9_main)
 
 # UK
 s9_uk <- s9_main %>%
   filter(country == 39)
-s9_uk_result <- lm(response ~ cond, data = s9_uk)
+s9_uk_result <- lm(response ~ money + big_money, data = s9_uk)
 
 # Poland
 s9_poland <- s9_main %>%
   filter(country == 27)
   
-s9_poland_result <- lm(response ~ cond, data = s9_poland)
+s9_poland_result <- lm(response ~ money + big_money, data = s9_poland)
 
 # USA
 s9_usa <- s9_main %>%
   filter(country == 40)
-s9_usa_result <- lm(response ~ cond, data = s9_usa)
+s9_usa_result <- lm(response ~ money + big_money, data = s9_usa)
 
 # final table
 stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result, 
           title = "Reporting rates in NoMoney, Money, and Big Money condition", 
           align = TRUE, 
-          type = 'latex', 
+          type = 'text', 
           dep.var.labels = "Response", 
-          covariate.labels = c("Money", "Constant"),
+          covariate.labels = c("Money", "Big Money", "Constant"),
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
 
@@ -315,7 +318,7 @@ s10_usa_result <- lm(response ~ cond, data = s10_usa)
 stargazer(s10_main_result, s10_uk_result, s10_poland_result, s10_usa_result, 
           title = "Reporting rates in Money-No Key condition", 
           align = TRUE, 
-          type = 'latex', 
+          type = 'text', 
           dep.var.labels = "Response", 
           covariate.labels = c("Money-NoKey", "Constant"),
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
