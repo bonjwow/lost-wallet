@@ -210,8 +210,9 @@ ggplot(data = dfRate3Cond,
   # male, above 40, coworkers, computer, bystanders
 
 # code dummy variables
-s8_model <- dfBehavModel
-s8_model$cond <- ifelse(s8_model$cond < 1, 0, 1)
+s8_model <- dfBehavModel %>%
+  filter(cond != 0)
+s8_model$cond <- ifelse(s8_model$cond == 1, 0, 1)
 
 # regression models
 s8_main_result <- lm(response ~ cond, data = s8_model)
@@ -223,8 +224,7 @@ stargazer(s8_main_result, s8_money_result,
           align = TRUE, 
           type = 'text', 
           dep.var.labels = "Response", 
-          covariate.labels = c("Money", "Male", "Above 40", "Computer", "Coworkers", "Other Bystanders", "Constant"),
-          column.labels = c("No Money", "Money"))
+          covariate.labels = c("Money", "Male", "Above 40", "Computer", "Coworkers", "Other Bystanders", "Constant"))
 
 ```
 
