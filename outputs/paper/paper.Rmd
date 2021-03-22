@@ -25,6 +25,12 @@ library(janitor)
 library(dplyr)
 library(stargazer)
 
+# install.packages ("gmodels")
+library (gmodels)
+
+# install.packages("pwr")
+library(pwr)
+
 ### Import the cleaned data
 dfCleanBehav <- readr::read_csv("../../inputs/data/clean_behavioral-data.csv")
 dfBehavModel <- readr::read_csv("../../inputs/data/clean_behavioral-data_model.csv")
@@ -187,11 +193,43 @@ ggplot(data = dfRate3Cond,
 ```
 
 
-
 ## Description of Study
 
 ## Methodology and Data Collection
 
+## Power Analysis
+```{r, echo = FALSE, message = FALSE}
+dfPwr <-
+  dfBehavModel %>%
+  select('cond',
+         'response') %>%
+  filter(cond == 0 | cond == 1)
+
+CrossTable(dfPwr$cond, dfPwr$response, chisq=TRUE, format=c("SPSS"))
+```
+
+
+```{r, echo = FALSE, message = FALSE}
+freqByCond <-
+  dfBehavModel %>%
+  select('cond',
+         'response') %>%
+  filter(cond == 0 | cond == 1) %>%
+  group_by(cond, response) %>%
+  summarise(n = n()) %>%
+  mutate(freq = n / sum(n))
+
+propNoMoneyReturned <- freqByCond$freq[2]
+proMoneyReturned <- freqByCond$freq[4]
+
+# Reference Code: https://rdrr.io/cran/pwr/man/ES.h.html
+effectSize <- 2 * asin(sqrt(propNoMoneyReturned)) - 2 * asin(sqrt(proMoneyReturned))
+
+### Two-sample test for proportions (Unequal sample sizes)
+# Reference Code:https://cran.r-project.org/web/packages/pwr/vignettes/pwr-vignette.html
+# Reference: Conventional effect size from Cohen (1982)
+pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
+```
 
 
 # Model
