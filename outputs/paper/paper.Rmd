@@ -26,7 +26,7 @@ library(dplyr)
 library(stargazer)
 
 # install.packages ("gmodels")
-library (gmodels)
+library(gmodels)
 
 # install.packages("pwr")
 library(pwr)
@@ -259,14 +259,15 @@ s8_money_result <- lm(response ~ cond + male + above40 + computer + coworkers + 
 # final table (S8)
 stargazer(s8_main_result, s8_money_result, 
           title = "Reporting rates in the Money and No Money Condition", 
+          header = FALSE,
           align = TRUE, 
-          type = 'text', 
+          type = 'latex', 
           dep.var.labels = "Response", 
           covariate.labels = c("Money", "Male", "Above 40", "Computer", "Coworkers", "Other Bystanders", "Constant"))
 
 ```
 
-```{r S9, echo = FALSE, warning = FALSE, message = FALSE}
+```{r S9, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
 ### conditions
 # 0 - no money, 1 - money, 2 - big money, 3 - money no key.
 
@@ -306,15 +307,17 @@ s9_usa_result <- lm(response ~ money + big_money, data = s9_usa)
 
 # final table
 stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result, 
-          title = "Reporting rates in NoMoney, Money, and Big Money condition", 
+          title = "Reporting rates in NoMoney, Money, and Big Money condition",
+          header = FALSE,
           align = TRUE, 
-          type = 'text', 
+          font.size = "small",
+          type = 'latex', 
           dep.var.labels = "Response", 
           covariate.labels = c("Money", "Big Money", "Constant"),
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
 
-```{r S10, echo = FALSE, warning = FALSE, message = FALSE}
+```{r S10, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
 ### conditions
 # 0 - no money, 1 - money, 2 - big money, 3 - money no key.
 
@@ -355,12 +358,17 @@ s10_usa_result <- lm(response ~ cond, data = s10_usa)
 # final table
 stargazer(s10_main_result, s10_uk_result, s10_poland_result, s10_usa_result, 
           title = "Reporting rates in Money-No Key condition", 
+          header = FALSE,
           align = TRUE, 
-          type = 'text', 
+          font.size = "small",
+          type = 'latex', 
           dep.var.labels = "Response", 
           covariate.labels = c("Money-NoKey", "Constant"),
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
+
+\newpage 
+
 # Discussion
 
 ## Overview of Findings
