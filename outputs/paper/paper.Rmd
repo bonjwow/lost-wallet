@@ -222,11 +222,11 @@ freqByCond <-
 propNoMoneyReturned <- freqByCond$freq[2]
 proMoneyReturned <- freqByCond$freq[4]
 
-# Reference Code: https://rdrr.io/cran/pwr/man/ES.h.html
+# Reference Code: https://cran.r-project.org/web/packages/pwr/pwr.pdf
 effectSize <- 2 * asin(sqrt(proMoneyReturned)) - 2 * asin(sqrt(propNoMoneyReturned))
 
 ### Two-sample test for proportions (Unequal sample sizes)
-# Reference Code:https://cran.r-project.org/web/packages/pwr/pwr.pdf
+# Reference Code:https://cran.r-project.org/web/packages/pwr/vignettes/pwr-vignette.html
 # Reference: Conventional effect size from Cohen (1982)
 pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
 ```
