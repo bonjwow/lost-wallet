@@ -233,8 +233,71 @@ pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
 
 
 # Model
+We used a linear regression model, specifically ordinary least squares (OLS), which are used to examine relationships between variables, specifically looking to determine which independent variables hold the most and/or significant influence over dependent variables - in this case, whether the wallet is reported or not. In addition to this, we can see how changes in the independent variables are related to changes in the dependent variable through use of dummy variables. It allows us to understand the mean change in a dependent variable, given a 1 unit change in each independent variable.Three regressions were run. Table 1’s second column and Table 2 consists of multiple linear regressions, Table 1’s first column and Table 3 are simple linear regressions.
 
-```{r model checks, echo = FALSE, message = FALSE, warning = FALSE}
+## Formulae
+
+
+## Model Features/Aspects
+
+Like stated prior, 3 OLS regressions are run within this paper to replicate tables S8, S9, and S10 in the original paper, respectively Tables 1, 2, and 3 within this paper.
+
+* Treatment Condition (cond, as found in the cleaned model dataset):
+    * Originally, the treatment condition is a categorical variable from 0-3, where 0 = NoMoney, 1 = Money, 2 = Big Money, 3 = Money-NoKey.
+    * To replicate S8, the treatment condition had to be re-coded into a dichotomous variable where 0 is the NoMoney condition, and 1 comprises the Money, BigMoney, and Money-NoKey conditions.
+    * For S9, dummy variables had to be created in order to focus on the BigMoney and Money conditions,
+    * And for S9, the treatment condition was again re-coded so 1 referred to the Money-NoKey condition, and 0 comprised all other conditions. 
+
+In doing so, we could isolate for the correct conditions when running the model. 
+
+The remaining variables within the model, such as whether the respondent is male, above 40, coworkers, a computer, or other bystanders are present, are all binary variables. Using dummy variables, and/or avoiding categorical ones was necessary to ensure that those demarcated with a value of 0 will cause that particular variable to have no role in influencing the dependent variable, which in this instance is response/reporting of the wallet.
+
+
+## Justification
+
+For the purposes of this study, a regression analysis makes sense due to the use of a categorical/binary dependent variable, whether the person reports the lost wallet to the owner, and continuous or binary independent variables. Linear regression, as opposed to nonlinear regression models, are a better fit for this study due to their simplicity, assuming adequate fit in the residual plots.
+
+Assumptions underpinning OLS models include:
+
+* No heteroscedasticity: the error term has a constant variance,
+* Linearity in Parameters: the regression model is linear in coefficients and error term,
+* Zero conditional mean: error term has a population mean of zero 
+* Variation in X: there is variation in the explanatory variable,
+* Normality - No IV is a perfect linear function of other explanatory variables,
+* And Random Sampling: the observed data represents a random sample from the population
+
+
+### Alternatives
+
+According to Cohn et al’s (2019) supplementary materials, OLS was chosen over non-linear models (e.g., logistic regression) as they return virtually identical results. In addition to this, OLS was used for simplicity and clarity as “coefficients can be directly interpreted as percent point changes.” OLS is easier to perform, and interpret. Nonlinear regressions use iterative algorithms as opposed to the linear, solving with matrix equations. This introduces worry about algorithm choice, starting values, and convergence possibilities.
+
+## Model Convergence/Checks
+
+RMSE is the square root of the variance of residuals, and indicates the absolute fit of the model to the data. Specifically, it tells us how close the observed data points are to the model’s predicted values, and as such, can be interpreted as the standard deviation of the unexplained variance. Lower values of RMSE indicate better fit, with 0 meaning a perfect fit. Once again, the “response” in this particular model is whether the recipient of the wallet does or does not report it stolen - 0, or 100.
+The RMSE for each regression are as follows:
+
+* Table 1
+    * Col 1: RMSE = 49.76789
+    * Col 2: RMSE = 49.01223
+
+* Table 2
+    * Col 1: RMSE = 48.53371
+    * Col 2: RMSE = 48.30933
+    * Col 3: RMSE = 46.21193
+    * Col 4: RMSE = 49.22719
+* Table 3
+    * Col 1: RMSE = 49.13414
+    * Col 2: RMSE = 49.43042
+    * Col 3: RMSE = 46.35512
+    * Col 4: RMSE = 49.9143
+    
+The high RMSE here may partially be as a result of failure to account for fixed effects in the models, such as institution and city. That withstanding, since the response data ranges from 0 to 100, the RMSE’s result uses the same unit, the numbers here are incredibly large and do not suggest a great fit. However, considering doesn’t truly range from 0 to 100, and is rather a binary 0 or 100 for non-response or response, this may have affected the result.
+
+## Software Used
+
+To run the OLS model, we used the @citeR inbuilt function, lm(), which is used to fit linear models. It has two key arguments: formula, and data. Formula takes on the form y ~ x1 + x2, where y is the dependent variable and x1, x2, and onward are the independent variable, while data is the data frame containing the columns specified in the formula. The stargazer package by @citeStargazer was used to create the LaTeX regression tables.
+
+```{r s8modelchecks, echo = FALSE, message = FALSE, warning = FALSE}
 
 ### S8/Table 1 (main result)
 
@@ -252,7 +315,7 @@ s8_rmse <- c(sqrt(mean(s8_main_result$residuals^2)),
 ```
 
 
-```{r s9modelcheck}
+```{r s9modelcheck, echo = FALSE, message = FALSE, warning = FALSE}
 
 ### S9 (main result)
 
@@ -287,7 +350,7 @@ s9_rmse <- c(sqrt(mean(s9_main_result$residuals^2)),
 
 ```
 
-```{r s10modelcheck, echo - FALSE, warning = FALSE, messages = FALSE}
+```{r s10modelcheck, echo - FALSE, warning = FALSE, message = FALSE}
 ### S10/Table 3 (main result)
 
 s10_main <- dfBehavModel %>%
@@ -351,6 +414,13 @@ stargazer(s8_main_result, s8_money_result,
 
 ```
 
+Table 1’s results are aggregated across the 40 countries visited to conduct the experiment. Results show the following:
+* Lost wallet reporting rates increase by 12 percentage points in the Money relative to the NoMoney condition
+* Men are less likely to report a wallet than woman 
+the presence of a computer increased likelihood of reporting the lost wallet,
+* but the presence of other bystanders decreased reporting rates,
+* However, unlike in the original paper, age groups (above and under 40), and the presence of coworkers had no statistical significance regarding reporting or failing to report lost wallets.
+
 ```{r S9, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
 ### conditions
 # 0 - no money, 1 - money, 2 - big money, 3 - money no key.
@@ -400,6 +470,12 @@ stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result,
           covariate.labels = c("Money", "Big Money", "Constant"),
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
+
+Table 2 examines reporting rates for the Money and BigMoney conditions in the UK, Poland, and the USA.
+* Column 1 shows that across the three countries, they were more likely to report a lost wallet containing greater amounts of money.
+* Columns 2-4, where the countries are isolated, shows a trend that wallets with larger amounts of money are more likely to be reported.
+* With smaller amounts of money, only the UK and US showed statistically significant likelihood of reporting the lost wallets.
+
 
 ```{r S10, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
 ### conditions
@@ -451,15 +527,33 @@ stargazer(s10_main_result, s10_uk_result, s10_poland_result, s10_usa_result,
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
 
+Table 3 looks at reporting rates for the Money-NoKey conditions in the UK, Poland, and the USA.
+* Column 1 shows that fewer wallets were reported when they did not contain a key in the 3 countries.
+* Columns 2-4 show that this pattern holds for the UK, Poland, and the USA, but the difference was only statistically significant for the UK and Poland.
+
+Here, we see that it is less likely for Money-NoKey wallets to be reported compared to Money condition wallets in Table 2. This may suggest that having a key present indicates greater loss than the small (USD$13.45) sum of money, as losing the key may cause the owner greater inconvenience.
+
+
 \newpage 
 
 # Discussion
 
-## Overview of Findings
+This paper seeks to replicate the results found in the study on civic honesty around the globe. Using their datasets, and limiting to results pertaining to reporting rates across the 4 treatment conditions (NoMoney, Money, BigMoney, and Money-NoKey), we attempt to validate their findings on civic honesty. Like Cohn et al. (2019), from the results, we found that citizens appear to display greater civic honesty when wallets contain money, the likelihood of contacting the wallet owner increasing when the wallet has larger amounts of money (Table 1, Table 2. This result holds when controlling for recipient and situational characteristics, such as gender, presence of coworkers, a computer, or bystanders, and age, as seen in Table 1. However, the effects of a coworker/coworkers being present, as well as being ages 40+ did not produce statistically significant results as found in the original paper. In addition, when the wallet contains money but no key, citizens are less likely to contact the owner compared to instances where there was money and a key (Table 3). 
 
-## Weaknesses and next steps
+## Limitations
 
-Weaknesses and next steps should also be included.
+There are several limitations associated with the study that must be addressed. The first relates to the survey data that was gathered. Cross-country surveys come with a number of limitations, e.g., comparisons of survey data may be biased due to cultural differences in interpretations of questions, how participants make use of response scales, and to what degree responses are influenced by social desirability concerns (Tannenbaum et al., -@citeTannenbaum. It is challenging to draw clean comparisons through survey data alone with these limitations, not including the question of whether survey responses actually translate to meaningful behaviours despite cognitive biases and social desirability effects (Bertrand and Mullainathan, -@citeBertrand. The limitations listed here raise the likelihood that surveys regarding social capital have little similarity with objective measures of social capital (Tannenbaum et al., -@citeTannenbaum. In addition to survey limitations, it is possible that failure to return the wallet or contact the owner is not a dishonest act, but caused by the policies in place at the institutions the wallets were lost in, e.g., use of a lost and found as mentioned by Sulitzeanu-Kenan et al., -@citeSulitzeanu, or even fatigue.
+
+## Next Steps
+
+Based on the above limitations, we have some suggestions for how the experiment can be extended and/or improved upon. To start, the researchers need to ensure that all institutions used in the study do not have a policy against contacting owners of lost items would allow for a firmer conclusion in whether non-returns are a result of dishonesty or altruistic behaviour. The current model leaves room for non-responses being codified as dishonest where they may not be. Second, in the initial study, additional representative surveys were given in the UK, Poland, and the US, where respondents were given detailed descriptions of wallet drop-off procedure, and asked how likely it was they’d contact the owner. Across the 3 countries, the average was 100%, substantially higher than the wallet return rates seen in the regression results and our replication. Social desirability in the face of them knowing their answers will be seen by someone differs greatly from receiving and/or finding a wallet and the task being left up to you with no indication of who the owner may be.
+
+## Ethics/Bias
+
+40 countries, and 355 cities were used to represent the globe, with 400 observations per country. However, is it fair to say that the 40 countries chosen, or even those 5-8 largest cities per country that were selected, are representative of the world? If we look to the selection criteria for the countries/cities, as seen in the methodology section, countries without 5-8 cities with a minimum population of 100,000, countries that have strict customs, immigration, and banking regulations, and those deemed difficult to visit and/or unsane are omitted. As such, entire regions of the world are omitted, such as north and central Africa (not including Middle Eastern nations), and the Pacific Islands, while nearly half of all nations included are within Europe, introducing a heavy Western culture bias while attributing results to the world. There is also failure to mention the average socioeconomic status of the areas in which the wallets are dropped off, which can be a confounding variable.
+
+In addition to this, drop-off procedure for the wallets involved research assistants waking into a building, and approaching an employee at the counter to give them the counter and immediately leave the building without leaving contact details or asking for a receipt. Two factors come into mind: is it reasonable to treat the employee as the average person, and did their telling the employee that the wallet was found outside the building and around the corner, as opposed to inside the building, have an effect on the responses? In the event they were told that the wallet was found on the premises, it is possible that reporting rates could have increased due to added likelihood that someone would come searching for the wallet. Furthermore, all research assistants were pooled from two German speaking universities. Assuming they were German or Swiss nationals, it is incredibly likely that their English is accented, and that they are white, which may have had an effect on response rates compared with seeking out assistants within the target countries.
+
 
 \newpage
 
