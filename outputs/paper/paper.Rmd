@@ -234,7 +234,91 @@ pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
 
 # Model
 
+```{r model checks, echo = FALSE, message = FALSE, warning = FALSE}
 
+### S8/Table 1 (main result)
+
+s8_model <- dfBehavModel %>%
+  filter(cond != 0)
+s8_model$cond <- ifelse(s8_model$cond == 1, 0, 1)
+
+s8_main_result <- lm(response ~ cond, data = s8_model)
+s8_money_result <- lm(response ~ cond + male + above40 + computer + coworkers + other_bystanders, data = s8_model)
+
+  # RMSE
+s8_rmse <- c(sqrt(mean(s8_main_result$residuals^2)),
+            sqrt(mean(s8_money_result$residuals^2)))
+
+```
+
+
+```{r s9modelcheck}
+
+### S9 (main result)
+
+s9_main <- dfBehavModel %>%
+  filter(country == 39 | country == 27 | country == 40) %>%
+  mutate(money = if_else(cond == 1, 1, 0)) %>%
+  mutate(big_money = if_else(cond == 2, 1, 0))
+
+s9_main_result <- lm(response ~ money + big_money, data = s9_main)
+
+# UK
+s9_uk <- s9_main %>%
+  filter(country == 39)
+s9_uk_result <- lm(response ~ money + big_money, data = s9_uk)
+
+# Poland
+s9_poland <- s9_main %>%
+  filter(country == 27)
+  
+s9_poland_result <- lm(response ~ money + big_money, data = s9_poland)
+
+# USA
+s9_usa <- s9_main %>%
+  filter(country == 40)
+s9_usa_result <- lm(response ~ money + big_money, data = s9_usa)
+
+  # RMSE
+s9_rmse <- c(sqrt(mean(s9_main_result$residuals^2)),
+            sqrt(mean(s9_uk_result$residuals^2)),
+            sqrt(mean(s9_poland_result$residuals^2)),
+            sqrt(mean(s9_usa_result$residuals^2)))
+
+```
+
+```{r s10modelcheck, echo - FALSE, warning = FALSE, messages = FALSE}
+### S10/Table 3 (main result)
+
+s10_main <- dfBehavModel %>%
+  filter(country == 39 | country == 27 | country == 40)
+s10_main$cond <- ifelse(s10_main$cond == 3, 1, 0)
+
+
+s10_main_result <- lm(response ~ cond, data = s9_main)
+  # UK
+s10_uk <- s9_main %>%
+  filter(country == 39)
+s10_uk_result <- lm(response ~ cond, data = s10_uk)
+
+  # Poland
+s10_poland <- s10_main %>%
+  filter(country == 27)
+  
+s10_poland_result <- lm(response ~ cond, data = s10_poland)
+
+  # USA
+s10_usa <- s10_main %>%
+  filter(country == 40)
+s10_usa_result <- lm(response ~ cond, data = s10_usa)
+
+# RMSE
+s10_rmse <- c(sqrt(mean(s10_main_result$residuals^2)),
+              sqrt(mean(s10_uk_result$residuals^2)),
+              sqrt(mean(s10_poland_result$residuals^2)),
+              sqrt(mean(s10_usa_result$residuals^2)))
+
+```
 # Results
 
 ```{r S8, echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
