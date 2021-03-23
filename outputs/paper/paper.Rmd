@@ -1,10 +1,10 @@
 ---
-title: "TBD"
+title: "Reproduction of Civic Honesty around the Globe"
 subtitle: "TBD"
 author: "Bongju Yoo and Najma Osman"
 thanks: "Code and data are available at: https://github.com/bonjwow/lost-wallet"
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "By reproducing the research paper, Civic honesty around the globe, we examined what sampling methods the authors chose and how the data was gathered, and verified the regression models used in the original paper. We discovered that some of the variables in the original dataset contained the data collector’s estimation and judgment, and the rationale for selecting the countries was weak and unclear. The original research paper can be extended and/or improved with right choices of nations, more concrete criteria to measure abstract concepts, and considerations of socioeconomic status of the areas."
 output:
   bookdown::pdf_document2:
 header-includes:
@@ -46,10 +46,18 @@ colorGray <- "#E3E2E1"
 
 
 # Introduction
+This paper is the reproduction of the earlier research paper, Civic honesty around the globe, studied by Alain Cohn, Michel André Maréchal, David Tannenbaum, and Christian Lukas Zünd and proceeded between July 2013 and December 2016 [@citeCohn]. The research team conducted field experiments in 40 countries around the world to examine the “trade-off between honesty and self-interest” [@citeCohn]. The purpose of this reproduction work is to identify potential limitations and hidden biases from the original dataset and experimental design of the research paper, and suggest ways to extend and/or improve the original research paper.
 
-
+Firstly, we looked into the original dataset and examined what sampling approach the research team used and how the data was collected. We found that some of the variables in the dataset were recorded highly based on the research assistant's estimation and judgment since they had to measure abstract concepts such as actions and behaviors. Also, we found that the rationale for selecting the countries was ambiguous. These inaccurate and unclear methods of collecting the data can lead to lower the reliability and validity of the results of the research. Additionally, we ran power analysis to verify whether or not the sample sizes used in the dataset were appropriate and confirmed that the sizes were large enough to detect a statistically significant difference between the control group and treatment group. Secondly, we identified which independent variables impact the most significant influence on dependent variables, using ordinary least squares (OLS) regression. The results of our regression models were slightly different from the original ones: the absence or presence of coworker/coworkers was statistically significant; otherwise, being ages 40+ was not statistically significant. However, in general, most of the results were the same as the original paper.
 
 # Data
+
+## Description of Dataset
+This type of the dataset is a csv file, it is imported from the Harvard Dataverse Repository and uploaded June 15th, 2019 [@citeDataverse]. There were 57 variables and 17,303 observations, but we selected 12 variables using the R programming language [@citeR] and the ‘tidyverse’ package [@citeTidyverse]. The selected variables are: id, country (unique numeric code for each country), Country (the name of the country), city, institution (drop-off locations), cond (no money, money, and big money conditions), response (reported or not), age, above40 (the estimated age of the recipient), male (the gender of the recipient), coworkers, computer, other_bystanders. All of those attributes are coded as numerical values except for Country, which is code as alphabetical values. The key variables are response, country, cond, and response: the response variable was used as a dependent variable, the no money condition was used as a control variable, and the other two conditions were used as treatments.
+
+In the original dataset, there were two variables which may cause confusion due to their similarity: ‘country’ with lower case ‘c’ and ‘Country’ with upper case ‘C’. We used the ‘janitor’ package’s ‘clean_names” function to change the names to ‘country’ and ‘country_2’ to avoid confusion [@citeJanitor]. 
+
+
 
 ```{r, echo = FALSE, message = FALSE}
 ### All wallets with no money
