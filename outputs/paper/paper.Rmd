@@ -236,6 +236,21 @@ pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
 We used a linear regression model, specifically ordinary least squares (OLS), which are used to examine relationships between variables, specifically looking to determine which independent variables hold the most and/or significant influence over dependent variables - in this case, whether the wallet is reported or not. In addition to this, we can see how changes in the independent variables are related to changes in the dependent variable through use of dummy variables. It allows us to understand the mean change in a dependent variable, given a 1 unit change in each independent variable.Three regressions were run. Table 1’s second column and Table 2 consists of multiple linear regressions, Table 1’s first column and Table 3 are simple linear regressions.
 
 ## Formulae
+Table 1 (column 1) + Table 3:
+$$
+Y \sim \beta_0 + \beta_1X_1 + \epsilon
+$$
+Table 1 (column 2):
+
+$$
+Y \sim \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_3 + \beta_4X_4 + \beta_5X_5 + \beta_6X_6 + \epsilon
+$$
+
+Table 2:
+
+$$
+Y \sim \beta_0 + \beta_1X_1 + \beta_2X_2 + \epsilon
+$$
 
 
 ## Model Features/Aspects
@@ -350,7 +365,7 @@ s9_rmse <- c(sqrt(mean(s9_main_result$residuals^2)),
 
 ```
 
-```{r s10modelcheck, echo - FALSE, warning = FALSE, message = FALSE}
+```{r s10modelcheck, echo = FALSE, warning = FALSE, message = FALSE}
 ### S10/Table 3 (main result)
 
 s10_main <- dfBehavModel %>%
