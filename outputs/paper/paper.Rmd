@@ -1,6 +1,6 @@
 ---
 title: "Reproduction of Civic Honesty around the Globe"
-subtitle: "TBD"
+subtitle: "Are the chosen 40 countries representative of the world?"
 author: "Bongju Yoo and Najma Osman"
 thanks: "Code and data are available at: https://github.com/bonjwow/lost-wallet"
 date: "`r format(Sys.time(), '%d %B %Y')`"
@@ -590,18 +590,12 @@ Based on the above limitations, we have some suggestions for how the experiment 
 
 ## Ethics/Bias
 
-40 countries, and 355 cities were used to represent the globe, with 400 observations per country. However, is it fair to say that the 40 countries chosen, or even those 5-8 largest cities per country that were selected, are representative of the world? If we look to the selection criteria for the countries/cities, as seen in the methodology section, countries without 5-8 cities with a minimum population of 100,000, countries that have strict customs, immigration, and banking regulations, and those deemed difficult to visit and/or unsane are omitted. As such, entire regions of the world are omitted, such as north and central Africa (not including Middle Eastern nations), and the Pacific Islands, while nearly half of all nations included are within Europe, introducing a heavy Western culture bias while attributing results to the world. There is also failure to mention the average socioeconomic status of the areas in which the wallets are dropped off, which can be a confounding variable.
+40 countries, and 355 cities were used to represent the globe, with 400 observations per country. However, is it fair to say that the 40 countries chosen, or even those 5-8 largest cities per country that were selected, are representative of the world? If we look to the selection criteria for the countries/cities, as seen in the methodology section, countries without 5-8 cities with a minimum population of 100,000, countries that have strict customs, immigration, and banking regulations, and those deemed difficult to visit and/or unsafe are omitted. As such, entire regions of the world are omitted, such as north and central Africa (not including Middle Eastern nations), and the Pacific Islands, while nearly half of all nations included are within Europe, introducing a heavy Western culture bias while attributing results to the world. There is also failure to mention the average socioeconomic status of the areas in which the wallets are dropped off, which can be a confounding variable.
 
 In addition to this, drop-off procedure for the wallets involved research assistants waking into a building, and approaching an employee at the counter to give them the counter and immediately leave the building without leaving contact details or asking for a receipt. Two factors come into mind: is it reasonable to treat the employee as the average person, and did their telling the employee that the wallet was found outside the building and around the corner, as opposed to inside the building, have an effect on the responses? In the event they were told that the wallet was found on the premises, it is possible that reporting rates could have increased due to added likelihood that someone would come searching for the wallet. Furthermore, all research assistants were pooled from two German speaking universities. Assuming they were German or Swiss nationals, it is incredibly likely that their English is accented, and that they are white, which may have had an effect on response rates compared with seeking out assistants within the target countries.
 
 
 \newpage
-
-# Appendix {-}
-
-\newpage
-
-
 # References
 
 
