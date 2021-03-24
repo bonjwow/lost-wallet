@@ -339,7 +339,7 @@ The high RMSE here may partially be as a result of failure to account for fixed 
 
 ## Software Used
 
-To run the OLS model, we used the @citeR inbuilt function, lm(), which is used to fit linear models. It has two key arguments: formula, and data. Formula takes on the form y ~ x1 + x2, where y is the dependent variable and x1, x2, and onward are the independent variable, while data is the data frame containing the columns specified in the formula. The `stargazer` package by @citeStargazer was used to create the LaTeX regression tables.
+To run the OLS model, we used the @citeR inbuilt function, lm(), which is used to fit linear models. It has two key arguments: formula, and data. Formula takes on the form y ~ x1 + x2, where y is the dependent variable and x1, x2, and onward are the independent variable, while data is the data frame containing the columns specified in the formula. The `stargazer` package by @citeStargazer was used to create the LaTeX regression tables. And, the `knitr` package is used to format this paper [@citeKnitr].
 
 ```{r s8modelchecks, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -459,11 +459,12 @@ stargazer(s8_main_result, s8_money_result,
 ```
 
 Table 1’s results are aggregated across the 40 countries visited to conduct the experiment. Results show the following:
+
 * Lost wallet reporting rates increase by 12 percentage points in the Money relative to the NoMoney condition.
 * Men are less likely to report a wallet than women 
 the presence of a computer increased likelihood of reporting the lost wallet.
 * But, the presence of other bystanders decreased reporting rates.
-* However, unlike in the original paper, age groups (above and under 40), and the presence of coworkers had no statistical significance regarding reporting or failing to report lost wallets.
+& However, unlike in the original paper, age groups (above and under 40), and the presence of coworkers had no statistical significance regarding reporting or failing to report lost wallets.
 
 ```{r S9, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
 ### conditions
