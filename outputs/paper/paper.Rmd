@@ -64,56 +64,7 @@ These situational factors were recorded by research assistants, and some of the 
 
 In addition, the estimation of the assistants can be incorrect, and eventually they might record false information during the data collection process. For example, in terms of the ‘Recipient age’ category, the assistants had to guess the recipient’s age and select one from six options: < 20, 20-30, 30-40, 40-50, 50-60, and > 60. What if the recipient looks 30? The assistants might choose either 20-30 or 30-40 based on their judgement since it is a huge challenge to correctly guess someone's age by looking at his or her face. A research team from the Department of Computer Science and Engineering at Michigan State University studied the ability of humans to estimate age using face images collected from crowdsourcing and found that the accuracy of guessing the age correctly with a margin of error of plus/minus 5 years is between 50% and 70% [@citeAgeEstimation]. Namely, there are high chances that the assistants might have recorded inaccurate information for some of those variables that require the researcher's estimation. As a consequence, this can lead to distorted results of the analysis. 
 
-The selection of countries raises another issue of the dataset: Do those countries really represent the globe? 40 countries are selected and examined for the research, and almost half (19 countries) of them are European countries. However, in reality, the population of all European countries is approximately 10% of the world's population [@citeWorldContinents]. In terms of the number of countries, there are merely 44 countries in Europe, out of 195 countries in the world, which accounts for about one-fourth of the total countries [@citeCountriesEurope]. Is it because those unselected countries could not meet the requirements of selection criteria? The selection criteria requirements for the country category are as follows:
-
-* The country must have a sufficient number (at least 100,000) of large cities;
-* The country must have a plenty of “feasible drop-off locations” where can be easily accessible;
-* The country must be “easy to visit and safe enough” for research assistants to proceed with the wallet dropping experiment; and
-* The country must have less strict customs, immigration, and banking regulation [@citeCohn].
-
-It can be arguable that UAE, Malaysia, and Kazakhstan were selected instead of other Asian countries with larger population size and more large cities such as Japan, Philippines, Vietnam, and South Korea [@citeCityPopulations]. Japan was not included in the category even though the country has the most and tenth-most populous cities in the world: Tokyo and Osaka [@citeCityPopulations]. Furthermore, Japan was one of the “10 Safest Countries In The World To Visit” chosen by Forbes in 2020; otherwise, none of the selected Asian countries was not included in the list [@citeSafestCountries].
-
-The research data was collected by 13 research assistants: 11 male and 2 female born between 1985 and 1993. The assistants were instructed to say: “Hi, I found this [showing the wallet] on the street just around the corner” [@citeCohn]. After handing the wallet over to the recipient, they were also guided to say: “Somebody must have lost it. I’m in a hurry and have to go. Can you please take care of it?” [@citeCohn]. If the recipient contacts the email written on the business card inside the wallet to return it, the response variable is recorded as 1, meaning being responded. Even if the recipient makes a minor typo on the email address, the recipient email is designed to receive it unless misspelling the domain name [@citeCohn]. 
-
-## Cost
-The wallets for the money condition contained the equivalent of US $13.45, and the ones for the big money condition contained the equivalent of US $94.15 [@citeCohn]. So, the total amount of the cash spent for the experiment was $249,000, including exchange fees. Additionally, $3,600 was spent for the production of the wallets: $1,000 for printing business cards, $800 for producing plastic wallets, and $1,800 for copying keys. The research assistants were paid an hourly wage of $25 per hour, and the total wage expense was $300,000. The total expenditure on transportation such as flights and car rentals was $150,000.
-
-## Power Analysis
-We ran power analysis to check whether the research team used an appropriate sample size for the original paper. Firstly, we calculated the proportions of the returned wallets in the control group (the ‘no money’ condition) and the treatment group (‘the ‘money’ condition), using the raw data using the dplyr’s select, group_by, summarise, and mutate functions [@citeDplyr]. Then, we calculated the effect size, using the formula written by Stephane Champely [@citePwrPdf]. Lastly, we ran the two-sample test for proportions to estimate the required sample size which is required to show a significant difference between the two groups, using the ‘pwr’ package [@citePwr]. The result of the test shows that the most appropriate size of a sample to compare the two condition groups is 313 for each. Since the sample size of the control group is 7,888 and that of the treatment group is 8,211, we can say that the sample size is large enough to find a statistically significant difference between the two groups. The result of the power analysis is displayed below.
-
-```{r, include = FALSE, message = FALSE}
-dfPwr <-
-  dfBehavModel %>%
-  select('cond',
-         'response') %>%
-  filter(cond == 0 | cond == 1)
-
-CrossTable(dfPwr$cond, dfPwr$response, chisq=TRUE, format=c("SPSS"))
-```
-
-
-```{r, echo = FALSE, message = FALSE}
-freqByCond <-
-  dfBehavModel %>%
-  select('cond',
-         'response') %>%
-  filter(cond == 0 | cond == 1) %>%
-  group_by(cond, response) %>%
-  summarise(n = n()) %>%
-  mutate(freq = n / sum(n))
-
-propNoMoneyReturned <- freqByCond$freq[2]
-proMoneyReturned <- freqByCond$freq[4]
-
-# Reference Code: https://cran.r-project.org/web/packages/pwr/pwr.pdf
-effectSize <- 2 * asin(sqrt(proMoneyReturned)) - 2 * asin(sqrt(propNoMoneyReturned))
-
-### Two-sample test for proportions (Unequal sample sizes)
-# Reference Code:https://cran.r-project.org/web/packages/pwr/vignettes/pwr-vignette.html
-# Reference: Conventional effect size from Cohen (1982)
-pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
-```
-
+Figure \@ref(fig:figReportedByCountry) is a replica of a dumbbell plot included in the original research paper, which shows share of returned (reported) wallets in NoMoney and Money conditions by country. As can be seen in the figure, people were more likely to return wallets with more money in most of the countries selected for the research. If so, can we say that people tend to return wallets contained more money in "most countries"?
 
 ```{r, echo = FALSE, message = FALSE}
 ### All wallets with no money
@@ -163,7 +114,7 @@ dfMergedMoney <-
 ```
 
 
-```{r, echo = FALSE, message = FALSE}
+```{r figReportedByCountry, echo = FALSE, message = FALSE, fig.cap="Share of wallets reported in the NoMoney and Money conditions, by country"}
 
 #### Dumbbell plot: Share of wallets reported by country ####
 
@@ -185,12 +136,66 @@ ggplot(dfRatings, aes(y = country, x = noMoney, xend = money)) +
                 dot_guide_size = 0.05,
                 show.legend = TRUE) +
                 # TODO: Fix legend 
-  labs(x = NULL, y = NULL, title = "Share of wallets reported by country") +
+  labs(x = NULL, y = NULL, title = "") +
   theme_minimal() +
   scale_color_manual(name = "", values = c("red", "blue")) +
   theme(panel.grid.major.x = element_line(size = 0.02))
 
 ```
+
+The selection of countries raises another issue of the dataset: Do those chosen countries really represent the globe? 40 countries are selected and examined for the research, and almost half (19 countries) of them are European countries. However, in reality, the population of all European countries is approximately 10% of the world's population [@citeWorldContinents]. In terms of the number of countries, there are merely 44 countries in Europe, out of 195 countries in the world, which accounts for about one-fourth of the total countries [@citeCountriesEurope]. Is it because those unselected countries could not meet the requirements of selection criteria? The selection criteria requirements for the country category are as follows:
+
+* The country must have a sufficient number (at least 100,000) of large cities;
+* The country must have a plenty of “feasible drop-off locations” where can be easily accessible;
+* The country must be “easy to visit and safe enough” for research assistants to proceed with the wallet dropping experiment; and
+* The country must have less strict customs, immigration, and banking regulation [@citeCohn].
+
+It can be arguable that UAE, Malaysia, and Kazakhstan were selected instead of other Asian countries with larger population size and more large cities such as Japan, Philippines, Vietnam, and South Korea [@citeCityPopulations]. Japan was not included in the category even though the country has the most and tenth-most populous cities in the world: Tokyo and Osaka [@citeCityPopulations]. Furthermore, Japan was one of the “10 Safest Countries In The World To Visit” chosen by Forbes in 2020; otherwise, none of the selected Asian countries was not included in the list [@citeSafestCountries].
+
+The research data was collected by 13 research assistants: 11 male and 2 female born between 1985 and 1993. The assistants were instructed to say: “Hi, I found this [showing the wallet] on the street just around the corner” [@citeCohn]. After handing the wallet over to the recipient, they were also guided to say: “Somebody must have lost it. I’m in a hurry and have to go. Can you please take care of it?” [@citeCohn]. If the recipient contacts the email written on the business card inside the wallet to return it, the response variable is recorded as 1, meaning being responded. Even if the recipient makes a minor typo on the email address, the recipient email is designed to receive it unless misspelling the domain name [@citeCohn]. 
+
+## Cost
+The wallets for the money condition contained the equivalent of US $13.45, and the ones for the big money condition contained the equivalent of US $94.15 [@citeCohn]. So, the total amount of the cash spent for the experiment was $249,000, including exchange fees. Additionally, $3,600 was spent for the production of the wallets: $1,000 for printing business cards, $800 for producing plastic wallets, and $1,800 for copying keys. The research assistants were paid an hourly wage of $25 per hour, and the total wage expense was $300,000. The total expenditure on transportation such as flights and car rentals was $150,000.
+
+## Power Analysis
+We ran power analysis to check whether the research team used an appropriate sample size for the original paper. Firstly, we calculated the proportions of the returned wallets in the control group (the ‘no money’ condition) and the treatment group (‘the ‘money’ condition), using the raw data using the dplyr’s select, group_by, summarise, and mutate functions [@citeDplyr]. Then, we calculated the effect size, using the formula written by Stephane Champely [@citePwrPdf]. Lastly, we ran the two-sample test for proportions to estimate the required sample size which is required to show a significant difference between the two groups, using the ‘pwr’ package [@citePwr]. The result of the test shows that the most appropriate size of a sample to compare the two condition groups is 313 for each. Since the sample size of the control group is 7,888 and that of the treatment group is 8,211, we can say that the sample size is large enough to find a statistically significant difference between the two groups. The result of the power analysis is displayed below.
+
+```{r, include = FALSE, message = FALSE}
+### Cross Table for the control and treatment groups
+dfPwr <-
+  dfBehavModel %>%
+  select('cond',
+         'response') %>%
+  filter(cond == 0 | cond == 1)
+
+CrossTable(dfPwr$cond, dfPwr$response, chisq=TRUE, format=c("SPSS"))
+```
+
+
+```{r, echo = FALSE, message = FALSE}
+### The result of the power analysis
+freqByCond <-
+  dfBehavModel %>%
+  select('cond',
+         'response') %>%
+  filter(cond == 0 | cond == 1) %>%
+  group_by(cond, response) %>%
+  summarise(n = n()) %>%
+  mutate(freq = n / sum(n))
+
+propNoMoneyReturned <- freqByCond$freq[2]
+proMoneyReturned <- freqByCond$freq[4]
+
+# Reference Code: https://cran.r-project.org/web/packages/pwr/pwr.pdf
+effectSize <- 2 * asin(sqrt(proMoneyReturned)) - 2 * asin(sqrt(propNoMoneyReturned))
+
+### Two-sample test for proportions (Unequal sample sizes)
+# Reference Code:https://cran.r-project.org/web/packages/pwr/vignettes/pwr-vignette.html
+# Reference: Conventional effect size from Cohen (1982)
+pwr.2p.test(h = effectSize, sig.level = 0.05, power = 0.8)
+```
+
+
 
 ```{r, echo = FALSE, message = FALSE}
 #### Line chart: Reporting rates as a function of monetary stakes ####
