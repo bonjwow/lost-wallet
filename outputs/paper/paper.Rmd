@@ -459,11 +459,10 @@ stargazer(s8_main_result, s8_money_result,
 ```
 
 Table 1’s results are aggregated across the 40 countries visited to conduct the experiment. Results show the following:
-
-* Lost wallet reporting rates increase by 12 percentage points in the Money relative to the NoMoney condition
-* Men are less likely to report a wallet than woman 
-the presence of a computer increased likelihood of reporting the lost wallet,
-* but the presence of other bystanders decreased reporting rates,
+* Lost wallet reporting rates increase by 12 percentage points in the Money relative to the NoMoney condition.
+* Men are less likely to report a wallet than women 
+the presence of a computer increased likelihood of reporting the lost wallet.
+* But, the presence of other bystanders decreased reporting rates.
 * However, unlike in the original paper, age groups (above and under 40), and the presence of coworkers had no statistical significance regarding reporting or failing to report lost wallets.
 
 ```{r S9, echo = FALSE, warning = FALSE, message = FALSE, results = "asis"}
@@ -516,7 +515,8 @@ stargazer(s9_main_result, s9_uk_result, s9_poland_result, s9_usa_result,
           column.labels = c("UK, Poland, and US", "United Kingdom", "Poland", "United States"))
 ```
 
-Table 2 examines reporting rates for the Money and BigMoney conditions in the UK, Poland, and the USA.
+Table 2 examines reporting rates for the Money and BigMoney conditions in the UK, Poland, and the USA. Results show the
+following:
 
 * Column 1 shows that across the three countries, they were more likely to report a lost wallet containing greater amounts of money.
 * Columns 2-4, where the countries are isolated, shows a trend that wallets with larger amounts of money are more likely to be reported.
@@ -574,6 +574,7 @@ stargazer(s10_main_result, s10_uk_result, s10_poland_result, s10_usa_result,
 ```
 
 Table 3 looks at reporting rates for the Money-NoKey conditions in the UK, Poland, and the USA.
+
 * Column 1 shows that fewer wallets were reported when they did not contain a key in the 3 countries.
 * Columns 2-4 show that this pattern holds for the UK, Poland, and the USA, but the difference was only statistically significant for the UK and Poland.
 
@@ -584,11 +585,11 @@ Here, we see that it is less likely for Money-NoKey wallets to be reported compa
 
 # Discussion
 
-This paper seeks to replicate the results found in the study on civic honesty around the globe. Using their datasets, and limiting to results pertaining to reporting rates across the 4 treatment conditions (NoMoney, Money, BigMoney, and Money-NoKey), we attempt to validate their findings on civic honesty. Like Cohn et al. (2019), from the results, we found that citizens appear to display greater civic honesty when wallets contain money, the likelihood of contacting the wallet owner increasing when the wallet has larger amounts of money (Table 1, Table 2. This result holds when controlling for recipient and situational characteristics, such as gender, presence of coworkers, a computer, or bystanders, and age, as seen in Table 1. However, the effects of a coworker/coworkers being present, as well as being ages 40+ did not produce statistically significant results as found in the original paper. In addition, when the wallet contains money but no key, citizens are less likely to contact the owner compared to instances where there was money and a key (Table 3). 
+This paper seeks to replicate the results found in the study on civic honesty around the globe. Using their datasets, and limiting to results pertaining to reporting rates across the 4 treatment conditions (NoMoney, Money, BigMoney, and Money-NoKey), we attempt to validate their findings on civic honesty. Like Cohn et al. (2019), from the results, we found that citizens appear to display greater civic honesty when wallets contain money, the likelihood of contacting the wallet owner increasing when the wallet has larger amounts of money (Table 1, Table 2). This result holds when controlling for recipient and situational characteristics, such as gender, presence of coworkers, a computer, or bystanders, and age, as seen in Table 1. However, the effects of a coworker/coworkers being present, as well as being ages 40+ did not produce statistically significant results as found in the original paper. In addition, when the wallet contains money but no key, citizens are less likely to contact the owner compared to instances where there was money and a key (Table 3). 
 
 ## Limitations
 
-There are several limitations associated with the study that must be addressed. The first relates to the survey data that was gathered. Cross-country surveys come with a number of limitations, e.g., comparisons of survey data may be biased due to cultural differences in interpretations of questions, how participants make use of response scales, and to what degree responses are influenced by social desirability concerns (Tannenbaum et al., -@citeTannenbaum. It is challenging to draw clean comparisons through survey data alone with these limitations, not including the question of whether survey responses actually translate to meaningful behaviours despite cognitive biases and social desirability effects (Bertrand and Mullainathan, -@citeBertrand. The limitations listed here raise the likelihood that surveys regarding social capital have little similarity with objective measures of social capital (Tannenbaum et al., -@citeTannenbaum. In addition to survey limitations, it is possible that failure to return the wallet or contact the owner is not a dishonest act, but caused by the policies in place at the institutions the wallets were lost in, e.g., use of a lost and found as mentioned by Sulitzeanu-Kenan et al., -@citeSulitzeanu, or even fatigue.
+There are several limitations associated with the study that must be addressed. The first relates to the survey data that was gathered. Cross-country surveys come with a number of limitations, e.g., comparisons of survey data may be biased due to cultural differences in interpretations of questions, how participants make use of response scales, and to what degree responses are influenced by social desirability concerns [@citeTannenbaum]. It is challenging to draw clean comparisons through survey data alone with these limitations, not including the question of whether survey responses actually translate to meaningful behaviours despite cognitive biases and social desirability effects [@citeBertrand]. The limitations listed here raise the likelihood that surveys regarding social capital have little similarity with objective measures of social capital [@citeTannenbaum]. In addition to survey limitations, it is possible that failure to return the wallet or contact the owner is not a dishonest act, but caused by the policies in place at the institutions the wallets were lost in, e.g., use of a lost and found as mentioned by Sulitzeanu-Kenan et al., -@citeSulitzeanu, or even fatigue.
 
 ## Next Steps
 
@@ -596,9 +597,9 @@ Based on the above limitations, we have some suggestions for how the experiment 
 
 ## Ethics/Bias
 
-40 countries, and 355 cities were used to represent the globe, with 400 observations per country. However, is it fair to say that the 40 countries chosen, or even those 5-8 largest cities per country that were selected, are representative of the world? If we look to the selection criteria for the countries/cities, as seen in the methodology section, countries without 5-8 cities with a minimum population of 100,000, countries that have strict customs, immigration, and banking regulations, and those deemed difficult to visit and/or unsafe are omitted. As such, entire regions of the world are omitted, such as north and central Africa (not including Middle Eastern nations), and the Pacific Islands, while nearly half of all nations included are within Europe, introducing a heavy Western culture bias while attributing results to the world. There is also failure to mention the average socioeconomic status of the areas in which the wallets are dropped off, which can be a confounding variable.
+40 countries, and 355 cities were used to represent the globe, with 400 observations per country. However, is it fair to say that the 40 countries chosen, or even those 5-8 largest cities per country that were selected, are representative of the world? If we look to the selection criteria for the countries/cities, as seen in the methodology section, countries without 5-8 cities with a minimum population of 100,000, countries that have strict customs, immigration, and banking regulations, and those deemed difficult to visit and/or unsafe are omitted. As such, entire regions of the world are omitted, such as central Africa and the Pacific Islands, while nearly half of all nations included are within Europe, introducing a heavy Western culture bias while attributing results to the world. There is also failure to mention the average socioeconomic status of the areas in which the wallets are dropped off, which can be a confounding variable.
 
-In addition to this, drop-off procedure for the wallets involved research assistants waking into a building, and approaching an employee at the counter to give them the counter and immediately leave the building without leaving contact details or asking for a receipt. Two factors come into mind: is it reasonable to treat the employee as the average person, and did their telling the employee that the wallet was found outside the building and around the corner, as opposed to inside the building, have an effect on the responses? In the event they were told that the wallet was found on the premises, it is possible that reporting rates could have increased due to added likelihood that someone would come searching for the wallet. Furthermore, all research assistants were pooled from two German speaking universities. Assuming they were German or Swiss nationals, it is incredibly likely that their English is accented, and that they are white, which may have had an effect on response rates compared with seeking out assistants within the target countries.
+In addition to this, drop-off procedure for the wallets involved research assistants walking into a building, and approaching an employee at the counter to give them the counter and immediately leave the building without leaving contact details or asking for a receipt. Two factors come into mind: is it reasonable to treat the employee as the average person, and did their telling the employee that the wallet was found outside the building and around the corner, as opposed to inside the building, have an effect on the responses? In the event they were told that the wallet was found on the premises, it is possible that reporting rates could have increased due to added likelihood that someone would come searching for the wallet. Furthermore, all research assistants were pooled from two German speaking universities. Assuming they were German or Swiss nationals, it is incredibly likely that their English is accented, and that they are white, which may have had an effect on response rates compared with seeking out assistants within the target countries.
 
 
 \newpage
